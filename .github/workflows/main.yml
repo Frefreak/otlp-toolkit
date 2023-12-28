@@ -1,0 +1,37 @@
+name: Rust Build
+
+on: [push]
+
+jobs:
+ build:
+   runs-on: ${{ matrix.os }}
+   strategy:
+     matrix:
+       os: [ubuntu-latest]
+       targets: ['x86_64-unknown-linux-musl', 'x86_64-unknown-linux-gnu']
+
+   steps:
+   - uses: actions/checkout@v2
+     with:
+       submodules: true
+
+   - name: Install Rust
+     uses: actions-rs/toolchain@v1
+     with:
+       profile: minimal
+       toolchain: nightly
+       override: true
+
+   - name: Install musl-tools
+     run: sudo apt-get update && sudo apt-get install -y musl-tools
+
+   - name: Build
+     run: |
+       rustup target add ${{ matrix.targets }}
+       cargo build --release --target=${{ matrix.targets }}
+
+   - name: Archive production artifacts
+     uses: actions/upload-artifact@v2
+     with:
+       name: otk-${{ matrix.targets }}
+       path: ./target/${{ matrix.targets }}/release/otk
