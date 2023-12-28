@@ -1,6 +1,6 @@
 A cli tool used for testing opentelemetry stuffs.
 
-```
+```sh
 OpenTelemetry Toolkits
 
 Usage: otk <COMMAND>
