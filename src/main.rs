@@ -14,6 +14,7 @@ mod common;
 
 #[derive(Parser, Debug)]
 /// OpenTelemetry Toolkits
+#[clap(version = "0.2")]
 struct Opts {
     #[clap(subcommand)]
     command: SubCommand,
@@ -21,15 +22,15 @@ struct Opts {
 
 #[derive(Parser, Debug)]
 enum SubCommand {
-    #[clap(version="1.0", aliases=&["d", "de", "dec"])]
+    #[clap(aliases=&["d", "de", "dec"])]
     Decode(cmd_decode::Decode),
-    #[clap(version="1.0", aliases=&["t", "trace", "r", "re", "rep", "rt", "ret", "rept"])]
+    #[clap(aliases=&["t", "trace", "r", "re", "rep", "rt", "ret", "rept"])]
     ReportTrace(cmd_report_trace::Report),
-    #[clap(version="1.0", aliases=&["rm", "rem", "repm", "metric"])]
+    #[clap(aliases=&["rm", "rem", "repm", "metric"])]
     ReportMetric(cmd_report_metric::Report),
-    #[clap(version="1.0", aliases=&["l", "rl", "repl", "log"])]
+    #[clap(aliases=&["l", "rl", "repl", "log"])]
     ReportLog(cmd_report_log::Report),
-    #[clap(version="1.0", aliases=&["s", "st"])]
+    #[clap(aliases=&["s", "st"])]
     Search(cmd_search::Search)
 }
 
