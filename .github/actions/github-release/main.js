@@ -42,24 +42,24 @@ async function runOnce() {
   }
 
   // We also need to update the `dev` tag while we're at it on the `dev` branch.
-  if (name == 'nightly') {
+  if (name == 'latest') {
     try {
-      core.info(`updating nightly tag`);
+      core.info(`updating latest tag`);
       await octokit.rest.git.updateRef({
         owner,
         repo,
-        ref: 'tags/nightly',
+        ref: 'tags/latest',
         sha,
         force: true,
       });
     } catch (e) {
       core.error(e);
-      core.info(`creating nightly tag`);
+      core.info(`creating latest tag`);
       await octokit.rest.git.createTag({
         owner,
         repo,
-        tag: 'nightly',
-        message: 'nightly release',
+        tag: 'latest',
+        message: 'latest release',
         object: sha,
         type: 'commit',
       });
@@ -75,7 +75,7 @@ async function runOnce() {
     name,
     tag_name: name,
     target_commitish: sha,
-    prerelease: name === 'nightly',
+    prerelease: name === 'latest',
   });
   const release_id = release.data.id;
 
