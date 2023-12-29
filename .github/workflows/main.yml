@@ -2,6 +2,9 @@ name: Rust Build
 
 on: [push]
 
+env:
+  BIN: otk
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -25,20 +28,23 @@ jobs:
     - name: Install musl-tools
       run: sudo apt-get update && sudo apt-get install -y musl-tools
 
-    - name: Build
+    - name: Rust add target
       run: |
         rustup target add ${{ matrix.targets }}
-        cargo build --release --target=${{ matrix.targets }}
-        cp target/${{ matrix.targets }}/release/otk otk-${{ matrix.targets }}
 
     - name: Cache Dependencies
       uses: Swatinem/rust-cache@d30f1144e884b1fe579845ed7a339c640dff522e
 
+    - name: build
+      run: |
+        cargo build --release --target=${{ matrix.targets }}
+        cp target/${{ matrix.targets }}/release/${{ env.BIN }} ${{ env.BIN }}-${{ matrix.targets }}
+
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: otk-${{ matrix.targets }}
-        path: otk-${{ matrix.targets }}
+        name: ${{ env.BIN }}-${{ matrix.targets }}
+        path: ${{ env.BIN }}-${{ matrix.targets }}
 
   release:
     name: publish
@@ -57,12 +63,12 @@ jobs:
 
       - uses: actions/download-artifact@v1
         with:
-          name: otk-x86_64-unknown-linux-musl
+          name: ${{ env.BIN }}-x86_64-unknown-linux-musl
           path: ./dist
 
       - uses: actions/download-artifact@v1
         with:
-          name: otk-x86_64-unknown-linux-gnu
+          name: ${{ env.BIN }}-x86_64-unknown-linux-gnu
           path: ./dist
 
       - run: ls -al ./dist
