@@ -31,6 +31,9 @@ jobs:
         cargo build --release --target=${{ matrix.targets }}
         cp target/${{ matrix.targets }}/release/otk otk-${{ matrix.targets }}
 
+    - name: Cache Dependencies
+      uses: Swatinem/rust-cache@d30f1144e884b1fe579845ed7a339c640dff522e
+
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -48,6 +51,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+
+      - run: echo "HEAD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+      - run: 'echo "HEAD_SHA: $HEAD_SHA"'
 
       - uses: actions/download-artifact@v1
         with:
