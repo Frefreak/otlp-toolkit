@@ -19,7 +19,7 @@ strum = "0.20"
 strum_macros = "0.20"
 quick-error = "2.0.0"
 futures = "0.3"
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "1.38.0", features = ["full"] }
 tonic = { version = "0.9.2", features = ["tls", "transport"] }
 opentelemetry = { version = "0.21.0" }
 opentelemetry-otlp = { version = "0.14.0", features = ["tonic", "tls", "http-proto", "reqwest-client", "metrics", "logs"] }
