@@ -41,7 +41,7 @@ jobs:
         cp target/${{ matrix.targets }}/release/${{ env.BIN }} ${{ env.BIN }}-${{ matrix.targets }}
 
     - name: Archive production artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ env.BIN }}-${{ matrix.targets }}
         path: ${{ env.BIN }}-${{ matrix.targets }}
@@ -61,12 +61,12 @@ jobs:
       - run: echo "HEAD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
       - run: 'echo "HEAD_SHA: $HEAD_SHA"'
 
-      - uses: actions/download-artifact@v1
+      - uses: actions/download-artifact@v4
         with:
           name: ${{ env.BIN }}-x86_64-unknown-linux-musl
           path: ./dist
 
-      - uses: actions/download-artifact@v1
+      - uses: actions/download-artifact@v4
         with:
           name: ${{ env.BIN }}-x86_64-unknown-linux-gnu
           path: ./dist
