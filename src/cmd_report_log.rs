@@ -48,6 +48,10 @@ pub struct Report {
     #[clap(long, requires = "tls")]
     domain: Option<String>,
 
+    /// full url as base
+    #[clap(long)]
+    url: Option<String>,
+
     /// server host
     #[clap(long, default_value = "localhost", env = "OTK_REPORT_HOST")]
     host: String,
@@ -105,7 +109,11 @@ async fn do_report_log(report: Report) -> Result<(), Box<dyn error::Error>> {
         Protocol::HttpJson => DEFAULT_HTTP_JSON_PORT,
     });
     let scheme = if report.tls { "https" } else { "http" };
-    let endpoint_base = format!("{}://{}:{}", scheme, report.host, port);
+    let endpoint_base = if let Some(url) = &report.url {
+        url.clone()
+    } else {
+        format!("{}://{}:{}", scheme, report.host, port)
+    };
     let resource = Resource::new(report.rtags.iter().map(|x| x.clone().into()));
     let log_config = logs::config().with_resource(resource);
     let pipeline = pipeline.with_log_config(log_config);
